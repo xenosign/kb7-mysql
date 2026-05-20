@@ -12,11 +12,28 @@ CREATE TABLE students (
   primary_language    VARCHAR(20),
   info                VARCHAR(255),
   first_project_team  VARCHAR(50),
-  first_project_topic VARCHAR(100)  
+  first_project_topic VARCHAR(100),
+  manitto_round       INT,
+  manitto_who         VARCHAR(100)
 );
 
-INSERT INTO students (name, birth_year, mbti, birthday, cake, primary_lang, info, first_project_team, first_project_topic) VALUES
-('강채연', 2000, 'ISFP', '6/20',  '초코', 'C++', '대전, 게임 안좋아함, 한화 팬', '환우삼연', '금융 챌린지 기반 절약 가계부');
+INSERT INTO students (
+  name, birth_year, mbti, birthday,
+  cake_preference, primary_language, info,
+  first_project_team, first_project_topic,
+  manitto_round, manitto_who
+) VALUES
+('이효석', 1985, 'ESFP', '11/18',  '티라미수', 'JS, JAVA', '강원 삼척시, 페이커 팬, 김태희 팬', null, null, 2, '강태규');
+
+INSERT INTO students (
+  name, birth_year, mbti, birthday,
+  cake_preference, primary_language, info,
+  first_project_team, first_project_topic,
+  manitto_round, manitto_who
+) VALUES
+('이효석', 1985, 'ESFP', '11/18',  '티라미수', 'JS, JAVA', '강원 삼척시, 페이커 팬, 김태희 팬', null, null, 3, '양승환');
+
+
 
 INSERT INTO students (
   name, birth_year, mbti, birthday,
@@ -49,3 +66,16 @@ INSERT INTO students (
 
 SELECT * FROM students;
 
+SELECT * FROM students WHERE birth_year >= 2000 ORDER BY birth_year DESC;
+SELECT * FROM students WHERE birth_year < 2000 ORDER BY birth_year ASC;
+
+SELECT * FROM students WHERE info LIKE '%야구%';
+
+
+
+UPDATE students SET mbti = 'ENFP' WHERE name = '이효석';
+
+SELECT * FROM students WHERE name = '이효석';
+
+DELETE FROM students WHERE name = '이효석';
+DELETE FROM students WHERE name = '강채연';
