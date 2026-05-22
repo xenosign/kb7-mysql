@@ -1,24 +1,15 @@
-CREATE DATABASE `kb7-our-class-2`;
-USE `kb7-our-class-2`;
+-- CREATE DATABASE `kb7-our-class-2`;
+-- USE `kb7-our-class-2`;
 
-SELECT * FROM students;
+-- SELECT * FROM students;
 
 -- 기본 테이블
 CREATE TABLE students (
-  id                  INT           AUTO_INCREMENT PRIMARY KEY,
+  student_id          INT           AUTO_INCREMENT PRIMARY KEY,
   name                VARCHAR(20)   NOT NULL,
   birth_year          YEAR          NOT NULL,
   mbti                CHAR(4),
   birthday            VARCHAR(10)  
-);
-
--- 케이크 테이블 분리 > 1NF
-CREATE TABLE cake_preference (
-    cake_id     INT             NOT NULL AUTO_INCREMENT,
-    student_id  INT             NOT NULL,
-    cake_type   VARCHAR(50)     NOT NULL,
-    PRIMARY KEY (cake_id),
-    FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
 INSERT INTO students (
@@ -31,39 +22,30 @@ INSERT INTO students (
 
 INSERT INTO students (
   name, birth_year, mbti, birthday
-) VALUES ('', 2000, 'ENTP', '7/11');
+) VALUES ('권유현', 2001, 'ISFJ', '6/15');
 
+-- 케이크 테이블 분리 > 1NF
+CREATE TABLE cake_preference (
+    cake_id     INT             NOT NULL AUTO_INCREMENT,
+    student_id  INT             NOT NULL,
+    cake_type   VARCHAR(50)     NOT NULL,
+    PRIMARY KEY (cake_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
 
 INSERT INTO cake_preference (student_id, cake_type) VALUES
 (1, '티라미수'),
 (1, '치즈');
 
 SELECT 
-    s.id,
+    s.student_id,
     s.name,
     s.birth_year,
     s.mbti,
     s.birthday,
     c.cake_type
 FROM students s
-JOIN cake_preference c ON s.id = c.student_id;
-
--- 메인 언어 테이블 분리 > 1NF
-CREATE TABLE primary_language (
-    primary_language_id     INT             NOT NULL AUTO_INCREMENT,
-    student_id  INT             NOT NULL,
-    language   VARCHAR(50)     NOT NULL,
-    PRIMARY KEY (primary_language_id),
-    FOREIGN KEY (student_id) REFERENCES students(id)
-);
-
-INSERT INTO primary_language (student_id, language) VALUES
-(1, 'JS'),
-(1, 'JAVA');
-
-SELECT *
-FROM students s
-JOIN primary_language p ON s.id = p.student_id;
+JOIN cake_preference c ON s.student_id = c.student_id;
 
 -- 마니또 테이블 분리 > 2NF
 CREATE TABLE manito (
@@ -72,8 +54,8 @@ CREATE TABLE manito (
     round       INT        NOT NULL,          
     target_id   INT,                           
     PRIMARY KEY (manito_id),
-    FOREIGN KEY (student_id) REFERENCES students(id),
-    FOREIGN KEY (target_id)  REFERENCES students(id)
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (target_id)  REFERENCES students(student_id)
 );
 
 INSERT INTO manito (student_id, round, target_id) VALUES
@@ -87,7 +69,32 @@ SELECT
     s1.name,
     s2.name
 FROM manito m
-JOIN students s1 ON m.student_id = s1.id
-JOIN students s2 ON m.target_id = s2.id;
+JOIN students s1 ON m.student_id = s1.student_id
+JOIN students s2 ON m.target_id = s2.student_id;
+
+-- 프로젝트 테이블 분리 > 3NF
+CREATE TABLE projects (
+    project_id   INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,    
+    round        INT            NOT NULL,          
+    team         VARCHAR(20)    NOT NULL,
+    project_subject      VARCHAR(50)    NOT NULL
+);
+
+INSERT INTO projects (round, team, project_subject) VALUES
+(1, '돈독', '돼지 키우기');
+
+CREATE TABLE project_member (
+	project_member_id       INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    project_id              INT            NOT NULL,
+    student_id              INT            NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id),
+    FOREIGN KEY (student_id)  REFERENCES students(student_id)    
+);
+
+INSERT INTO project_member (project_id, student_id) VALUES
+(1, 2);
+
+INSERT INTO project_member (project_id, student_id) VALUES
+(1, 3);
 
 
