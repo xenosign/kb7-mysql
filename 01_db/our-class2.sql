@@ -1,6 +1,5 @@
 -- CREATE DATABASE `kb7-our-class-2`;
 -- USE `kb7-our-class-2`;
-
 -- SELECT * FROM students;
 
 -- 기본 테이블
