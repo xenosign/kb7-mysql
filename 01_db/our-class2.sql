@@ -1,5 +1,6 @@
 -- CREATE DATABASE `kb7-our-class-2`;
 -- USE `kb7-our-class-2`;
+
 -- SELECT * FROM students;
 
 -- 기본 테이블
@@ -95,5 +96,14 @@ INSERT INTO project_member (project_id, student_id) VALUES
 
 INSERT INTO project_member (project_id, student_id) VALUES
 (1, 3);
+
+SELECT
+	p.team,
+    p.project_subject,
+    s.name    
+FROM projects p
+JOIN project_member m ON p.project_id = m.project_id
+JOIN students s ON m.student_id = s.student_id;
+
 
 
