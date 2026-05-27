@@ -1,7 +1,7 @@
 USE `kb7-order-payment`;
-SELECT * FROM members;
+SELECT * FROM `member`;
 
-SELECT * FROM products;
+SELECT * FROM `product`;
 
 SELECT * FROM `order`;
 

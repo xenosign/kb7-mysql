@@ -33,7 +33,7 @@ INSERT INTO product (name, price, stock) VALUES
 (' 스틸시리즈 QCK mini 마우스 패드',        13900, 100),
 ('맥북 네오',     990000, 45);
 
-INSERT INTO `order` (member_id, status, total_price, order_date) VALUES
+INSERT INTO `order` (member_id_fk, status, total_price, order_date) VALUES
 -- 이효석
 (1,  'COMPLETED',   77900, '2025-01-05'),
 (1,  'PAID',        72000, '2025-02-10'),
@@ -110,7 +110,7 @@ INSERT INTO `order` (member_id, status, total_price, order_date) VALUES
 -- product: 1=독거미키보드(62000) 2=LogiLIFT(72000) 3=슈퍼라이트2(219000)
 --          4=MxKeysMini(129000) 5=팜레스트(15900)  6=마우스패드(13900) 7=맥북네오(990000)
 
-INSERT INTO order_item (order_id, product_id, quantity, unit_price) VALUES
+INSERT INTO order_item (order_id_fk, product_id_fk, quantity, product_price) VALUES
 -- order 1  이효석 1st: 독거미키보드 + 팜레스트 = 77,900
 (1,  1, 1,  62000), (1,  5, 1, 15900),
 -- order 2  이효석 2nd: Logi LIFT = 72,000

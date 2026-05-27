@@ -33,7 +33,7 @@ CREATE TABLE `order` (
 	CONSTRAINT fk_order_member FOREIGN KEY (member_id_fk) REFERENCES `member` (id)
 );
 
-CREATE TABLE `order-item` (
+CREATE TABLE `order_item` (
 	id            BIGINT        NOT NULL AUTO_INCREMENT,
     order_id_fk   BIGINT        NOT NULL,
     product_id_fk BIGINT        NOT NULL,
