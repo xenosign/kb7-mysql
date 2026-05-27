@@ -122,6 +122,8 @@ GROUP BY o.id, m.name, o.status, o.total_price, o.order_date
 HAVING m.name = '이효석'
 ORDER BY o.id;
 
+SELECT * FROM `order_item`;
+
 SELECT
     m.name                                  AS 주문자,
     o.id                                    AS 주문번호,
@@ -129,7 +131,7 @@ SELECT
     GROUP_CONCAT(p.name)                    AS 주문상품,
     o.total_price                           AS 주문총액,
     SUM(oi.quantity * oi.product_price)     AS 집계총액,
-    o.order_date                            AS 주문일
+    o.order_date                            AS 주문일    
 FROM `order` o
 JOIN member     m  ON o.member_id_fk   = m.id
 JOIN order_item oi ON oi.order_id_fk   = o.id
@@ -256,6 +258,23 @@ WHERE EXISTS (
     JOIN settlement s ON o.id = s.order_id_fk
     WHERE o.member_id_fk = m.id
       AND s.status = 'COMPLETED'
+);
+
+SELECT *
+FROM `member`
+WHERE EXISTS (
+	SELECT 1
+    FROM `order` 
+    WHERE total_price >= 1000000    
+);
+
+SELECT *
+FROM `member` m
+WHERE EXISTS (
+    SELECT 1
+    FROM `order`
+    WHERE member_id_fk = m.id    
+    AND total_price >= 100000
 );
 
 -- "각 회원의 첫 번째 주문"
