@@ -1,0 +1,11 @@
+START TRANSACTION;  -- 트랙잭션을 시작
+
+SELECT * FROM product
+WHERE id = 7
+FOR UPDATE;
+
+SELECT * FROM product
+WHERE id = 1
+FOR UPDATE;
+
+ROLLBACK;

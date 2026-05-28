@@ -1,0 +1,1 @@
+SELECT * FROM `product` WHERE name = '맥북 네오';
