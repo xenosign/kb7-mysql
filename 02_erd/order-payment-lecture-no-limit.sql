@@ -1,0 +1,319 @@
+CREATE DATABASE `kb7-order-payment-3`;
+USE `kb7-order-payment-3`;
+
+CREATE TABLE `member` (
+	id            BIGINT        NOT NULL AUTO_INCREMENT,
+    name          VARCHAR(50)   NOT NULL,
+    email         VARCHAR(100)  NOT NULL UNIQUE,
+    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE `product` (
+	id            BIGINT        NOT NULL AUTO_INCREMENT,
+    name          VARCHAR(50)   NOT NULL,
+    price         INT           NOT NULL,
+    stock         INT           NOT NULL DEFAULT 0,
+    updated_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE `order` (
+	id            BIGINT        NOT NULL AUTO_INCREMENT,
+    member_id_fk  BIGINT,
+    status        VARCHAR(20)   NOT NULL DEFAULT 'PENDING',
+    total_price   INT           NOT NULL,    
+    order_date    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (id)	
+);
+
+CREATE TABLE `order_item` (
+	id            BIGINT        NOT NULL AUTO_INCREMENT,
+    order_id_fk   BIGINT        NOT NULL,
+    product_id_fk BIGINT        NOT NULL,
+    quantity      INT           NOT NULL,    
+    product_price INT           NOT NULL,        
+    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (id)	
+);
+
+CREATE TABLE `settlement` (
+    id             BIGINT      NOT NULL AUTO_INCREMENT,
+    order_id_fk    BIGINT      NOT NULL UNIQUE,
+    settled_amount INT         NOT NULL,
+    fee            INT         NOT NULL DEFAULT 0,
+    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    settled_at     DATETIME    NULL,
+    created_at     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO `member` (name, email) VALUES
+('이효석', 'hyoseok.lee@example.com'),
+('강채연', 'cheyeon.kang@example.com'),
+('강태규', 'taegyu.kang@example.com'),
+('권유현', 'yuhyun.kwon@example.com'),
+('김건우', 'gunwoo.kim@example.com'),
+('김기선', 'kiseon.kim@example.com'),
+('김민철', 'mincheol.kim@example.com'),
+('김수현', 'suhyun.kim@example.com'),
+('김현태', 'hyuntae.kim@example.com'),
+('송준수', 'junsu.song@example.com'),
+('송태권', 'taekwon.song@example.com'),
+('양승환', 'seunghwan.yang@example.com'),
+('오진호', 'jinho.oh@example.com'),
+('이대주', 'daejoo.lee@example.com'),
+('이민호', 'minho.lee@example.com'),
+('이아영', 'ayoung.lee@example.com'),
+('이지민', 'jimin.lee@example.com'),
+('이지은', 'jieun.lee@example.com'),
+('이채연', 'chaeyeon.lee@example.com'),
+('장지연', 'jiyeon.jang@example.com'),
+('최규진', 'gyujin.choi@example.com'),
+('최보윤', 'boyoon.choi@example.com'),
+('홍상우', 'sangwoo.hong@example.com'),
+('황지원', 'jiwon.hwang@example.com');
+
+INSERT INTO product (name, price, stock) VALUES
+('독거미 키보드',         62000, 50),
+('Logi LIFT',            72000, 80),
+('로지텍 슈퍼라이트 2',            219000, 80),
+('Mx Keys mini',          129000, 60),
+('제닉스 팜레스트',             15900, 70),
+(' 스틸시리즈 QCK mini 마우스 패드',        13900, 100),
+('맥북 네오',     990000, 45);
+
+INSERT INTO `order` (member_id_fk, status, total_price, order_date) VALUES
+-- 이효석
+(1,  'COMPLETED',   77900, '2025-01-05'),
+(1,  'PAID',        72000, '2025-02-10'),
+-- 강채연
+(2,  'COMPLETED',   77900, '2025-01-05'),
+(2,  'PAID',        72000, '2025-02-10'),
+-- 강태규
+(3,  'COMPLETED',  142900, '2025-01-08'),
+(3,  'PAID',       219000, '2025-02-15'),
+-- 권유현
+(4,  'COMPLETED',   89800, '2025-01-12'),
+(4,  'PAID',        87900, '2025-02-18'),
+-- 김건우
+(5,  'COMPLETED',  990000, '2025-01-15'),
+(5,  'PAID',       144900, '2025-02-22'),
+-- 김기선
+(6,  'COMPLETED',  232900, '2025-01-18'),
+(6,  'PAID',        62000, '2025-02-25'),
+-- 김민철
+(7,  'COMPLETED',   99800, '2025-01-22'),
+(7,  'PAID',       129000, '2025-03-02'),
+-- 김수현
+(8,  'COMPLETED',  134000, '2025-01-25'),
+(8,  'PAID',        31800, '2025-03-05'),
+-- 김현태
+(9,  'COMPLETED', 1003900, '2025-01-28'),
+(9,  'PAID',       219000, '2025-03-09'),
+-- 송준수
+(10,  'COMPLETED',  144900, '2025-02-03'),
+(10,  'PAID',        85900, '2025-03-12'),
+-- 송태권
+(11, 'COMPLETED',   75900, '2025-02-06'),
+(11, 'PAID',       990000, '2025-03-15'),
+-- 양승환
+(12, 'COMPLETED',  234900, '2025-02-10'),
+(12, 'PAID',        41700, '2025-03-19'),
+-- 오진호
+(13, 'COMPLETED',  201000, '2025-02-13'),
+(13, 'PAID',        77900, '2025-03-22'),
+-- 이대주
+(14, 'COMPLETED',  990000, '2025-02-17'),
+(14, 'PENDING',     27800, '2025-04-02'),
+-- 이민호
+(15, 'COMPLETED',   85900, '2025-02-20'),
+(15, 'PENDING',    234900, '2025-04-05'),
+-- 이아영
+(16, 'COMPLETED',  129000, '2025-02-24'),
+(16, 'PENDING',     75900, '2025-04-08'),
+-- 이지민
+(17, 'COMPLETED', 1005900, '2025-02-27'),
+(17, 'PENDING',     72000, '2025-04-12'),
+-- 이지은
+(18, 'COMPLETED',  232900, '2025-03-03'),
+(18, 'PENDING',    160800, '2025-04-15'),
+-- 이채연
+(19, 'COMPLETED',  134000, '2025-03-06'),
+(19, 'PENDING',     27800, '2025-04-18'),
+-- 장지연
+(20, 'COMPLETED',  990000, '2025-03-10'),
+(20, 'PENDING',     43700, '2025-04-21'),
+-- 최규진
+(21, 'COMPLETED',  348000, '2025-03-13'),
+(21, 'PENDING',    124000, '2025-04-24'),
+-- 최보윤
+(22, 'COMPLETED',   85900, '2025-03-17'),
+(22, 'PENDING',     45700, '2025-04-27'),
+-- 홍상우
+(23, 'COMPLETED', 1003900, '2025-03-20'),
+(23, 'PENDING',    219000, '2025-05-03'),
+-- 황지원
+(24, 'COMPLETED',  216900, '2025-03-24'),
+(24, 'PENDING',     75900, '2025-05-07');
+
+-- product: 1=독거미키보드(62000) 2=LogiLIFT(72000) 3=슈퍼라이트2(219000)
+--          4=MxKeysMini(129000) 5=팜레스트(15900)  6=마우스패드(13900) 7=맥북네오(990000)
+
+INSERT INTO order_item (order_id_fk, product_id_fk, quantity, product_price) VALUES
+-- order 1  이효석 1st: 독거미키보드 + 팜레스트 = 77,900
+(1,  1, 1,  62000), (1,  5, 1, 15900),
+-- order 2  이효석 2nd: Logi LIFT = 72,000
+(2,  2, 1,  72000),
+-- order 3  강채연 1st: 독거미키보드 + 팜레스트 = 77,900
+(3,  1, 1,  62000), (3,  5, 1, 15900),
+-- order 4  강채연 2nd: Logi LIFT = 72,000
+(4,  2, 1,  72000),
+-- order 5  강태규 1st: Mx Keys mini + 마우스패드 = 142,900
+(5,  4, 1, 129000), (5,  6, 1, 13900),
+-- order 6  강태규 2nd: 슈퍼라이트2 = 219,000
+(6,  3, 1, 219000),
+-- order 7  권유현 1st: 독거미키보드 + 마우스패드x2 = 89,800
+(7,  1, 1,  62000), (7,  6, 2, 13900),
+-- order 8  권유현 2nd: Logi LIFT + 팜레스트 = 87,900
+(8,  2, 1,  72000), (8,  5, 1, 15900),
+-- order 9  김건우 1st: 맥북 네오 = 990,000
+(9,  7, 1, 990000),
+-- order 10 김건우 2nd: Mx Keys mini + 팜레스트 = 144,900
+(10, 4, 1, 129000), (10, 5, 1, 15900),
+-- order 11 김기선 1st: 슈퍼라이트2 + 마우스패드 = 232,900
+(11, 3, 1, 219000), (11, 6, 1, 13900),
+-- order 12 김기선 2nd: 독거미키보드 = 62,000
+(12, 1, 1,  62000),
+-- order 13 김민철 1st: Logi LIFT + 마우스패드x2 = 99,800
+(13, 2, 1,  72000), (13, 6, 2, 13900),
+-- order 14 김민철 2nd: Mx Keys mini = 129,000
+(14, 4, 1, 129000),
+-- order 15 김수현 1st: 독거미키보드 + Logi LIFT = 134,000
+(15, 1, 1,  62000), (15, 2, 1, 72000),
+-- order 16 김수현 2nd: 팜레스트x2 = 31,800
+(16, 5, 2,  15900),
+-- order 17 김현태 1st: 맥북 네오 + 마우스패드 = 1,003,900
+(17, 7, 1, 990000), (17, 6, 1, 13900),
+-- order 18 김현태 2nd: 슈퍼라이트2 = 219,000
+(18, 3, 1, 219000),
+-- order 19 송준수 1st: Mx Keys mini + 팜레스트 = 144,900
+(19, 4, 1, 129000), (19, 5, 1, 15900),
+-- order 20 송준수 2nd: Logi LIFT + 마우스패드 = 85,900
+(20, 2, 1,  72000), (20, 6, 1, 13900),
+-- order 21 송태권 1st: 독거미키보드 + 마우스패드 = 75,900
+(21, 1, 1,  62000), (21, 6, 1, 13900),
+-- order 22 송태권 2nd: 맥북 네오 = 990,000
+(22, 7, 1, 990000),
+-- order 23 양승환 1st: 슈퍼라이트2 + 팜레스트 = 234,900
+(23, 3, 1, 219000), (23, 5, 1, 15900),
+-- order 24 양승환 2nd: 마우스패드x3 = 41,700
+(24, 6, 3,  13900),
+-- order 25 오진호 1st: Mx Keys mini + Logi LIFT = 201,000
+(25, 4, 1, 129000), (25, 2, 1, 72000),
+-- order 26 오진호 2nd: 독거미키보드 + 팜레스트 = 77,900
+(26, 1, 1,  62000), (26, 5, 1, 15900),
+-- order 27 이대주 1st: 맥북 네오 = 990,000
+(27, 7, 1, 990000),
+-- order 28 이대주 2nd: 마우스패드x2 = 27,800
+(28, 6, 2,  13900),
+-- order 29 이민호 1st: Logi LIFT + 마우스패드 = 85,900
+(29, 2, 1,  72000), (29, 6, 1, 13900),
+-- order 30 이민호 2nd: 슈퍼라이트2 + 팜레스트 = 234,900
+(30, 3, 1, 219000), (30, 5, 1, 15900),
+-- order 31 이아영 1st: Mx Keys mini = 129,000
+(31, 4, 1, 129000),
+-- order 32 이아영 2nd: 독거미키보드 + 마우스패드 = 75,900
+(32, 1, 1,  62000), (32, 6, 1, 13900),
+-- order 33 이지민 1st: 맥북 네오 + 팜레스트 = 1,005,900
+(33, 7, 1, 990000), (33, 5, 1, 15900),
+-- order 34 이지민 2nd: Logi LIFT = 72,000
+(34, 2, 1,  72000),
+-- order 35 이지은 1st: 슈퍼라이트2 + 마우스패드 = 232,900
+(35, 3, 1, 219000), (35, 6, 1, 13900),
+-- order 36 이지은 2nd: Mx Keys mini + 팜레스트x2 = 160,800
+(36, 4, 1, 129000), (36, 5, 2, 15900),
+-- order 37 이채연 1st: 독거미키보드 + Logi LIFT = 134,000
+(37, 1, 1,  62000), (37, 2, 1, 72000),
+-- order 38 이채연 2nd: 마우스패드x2 = 27,800
+(38, 6, 2,  13900),
+-- order 39 장지연 1st: 맥북 네오 = 990,000
+(39, 7, 1, 990000),
+-- order 40 장지연 2nd: 팜레스트 + 마우스패드x2 = 43,700
+(40, 5, 1,  15900), (40, 6, 2, 13900),
+-- order 41 최규진 1st: Mx Keys mini + 슈퍼라이트2 = 348,000
+(41, 4, 1, 129000), (41, 3, 1, 219000),
+-- order 42 최규진 2nd: 독거미키보드x2 = 124,000
+(42, 1, 2,  62000),
+-- order 43 최보윤 1st: Logi LIFT + 마우스패드 = 85,900
+(43, 2, 1,  72000), (43, 6, 1, 13900),
+-- order 44 최보윤 2nd: 팜레스트x2 + 마우스패드 = 45,700
+(44, 5, 2,  15900), (44, 6, 1, 13900),
+-- order 45 홍상우 1st: 맥북 네오 + 마우스패드 = 1,003,900
+(45, 7, 1, 990000), (45, 6, 1, 13900),
+-- order 46 홍상우 2nd: 슈퍼라이트2 = 219,000
+(46, 3, 1, 219000),
+-- order 47 황지원 1st: Mx Keys mini + Logi LIFT + 팜레스트 = 216,900
+(47, 4, 1, 129000), (47, 2, 1, 72000), (47, 5, 1, 15900),
+-- order 48 황지원 2nd: 독거미키보드 + 마우스패드 = 75,900
+(48, 1, 1,  62000), (48, 6, 1, 13900);
+
+
+INSERT INTO `member` (name, email) VALUES
+('홍길동', 'gildong.hong@example.com');
+
+INSERT INTO `order` (member_id_fk, status, total_price, order_date)
+VALUES (NULL, 'PENDING', 0, NOW());
+
+SELECT * FROM `order`;
+
+
+
+
+SELECT *
+FROM member
+WHERE id NOT IN (
+    SELECT member_id_fk
+    FROM `order`
+);
+
+SELECT * FROM member;
+SELECT * FROM `order`;
+
+SELECT id, member_id_fk FROM `order`;
+
+
+SELECT *
+FROM member m
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM `order` o
+    WHERE o.member_id_fk = m.id
+);
+
+SELECT *
+FROM `order` o
+WHERE o.member_id_fk = m.id;
+
+SELECT *
+FROM member m
+WHERE EXISTS (
+    SELECT 1
+    FROM `order` o
+    WHERE o.member_id_fk = m.id
+);
+
+-- 조인으로 변경 
+SELECT *
+FROM `product`
+WHERE stock > (
+	SELECT AVG(stock) FROM `product`
+);
+
+
