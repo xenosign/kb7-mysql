@@ -1,1 +1,2 @@
-SELECT * FROM `product` WHERE name = '맥북 네오';
+-- 순자님의 송금 과정이 확정이 안된 상태에서 계좌를 확인 했을 때, 얼마가 찍혀야 하나요?
+SELECT * FROM `account`;
